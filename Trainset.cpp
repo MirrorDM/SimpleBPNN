@@ -4,7 +4,7 @@ VectorXd Trainset::calculateOutput(VectorXd input)
 {
     VectorXd output(outputsize);
     double ans = 0;
-    if (input[0] * input[1] > 0)
+    if ((input[0] * input[0]) + (input[1] * input[1]) > 0.64)
         ans = 1;
     output[0] = ans;
     return output;

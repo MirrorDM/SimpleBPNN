@@ -11,7 +11,7 @@ using namespace Eigen;
 using namespace std;
 
 const int inputs = 2;
-const int hidden = 4;
+const int hidden = 10;
 const int outputs = 1;
 
 int main()
@@ -26,10 +26,17 @@ int main()
 
     Trainset train(2, 1, 200000);
     Trainset testcase(2,1,1000);
-
+    
     for(int i = 0; i < train.getSize(); i++) {
+
+        if (i % (train.getSize() / 100) == 0)
+        {
+            cout << "Training Process: " << (double) i / train.getSize() * 100 << '%' << '\r';
+            cout.flush();
+        }
+
         x = train.getInput(i);
-        
+
         theta1 = w1.calculate(x);
         y = sigmoid(theta1);
 
@@ -69,7 +76,7 @@ int main()
 
         // PRINT(z);
     }
-
+    
     for (int i = 0; i < testcase.getSize(); i++)
     {
         x = testcase.getInput(i);
@@ -78,7 +85,9 @@ int main()
         testcase.setMyAns(z, i);
     }
     double accurate = testcase.calculatePrecision();
+    cout << endl << "----------" << endl;
     cout << "accurate: " << accurate * 100 << '%' << endl;
+    cout << "----------" << endl << endl;
 
     PRINT(w1.getMatrix());
     PRINT(w1.getOffset());
