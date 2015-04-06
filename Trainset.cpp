@@ -5,7 +5,10 @@ VectorXd Trainset::calculateOutput(VectorXd input)
     VectorXd output(outputsize);
     double ans = 0;
     if ((input[0] * input[0]) + (input[1] * input[1]) > 0.64)
+    //if ( (fabs(input[0]) + fabs(input[1])) > 1)
+    {
         ans = 1;
+    }
     output[0] = ans;
     return output;
 }
@@ -27,20 +30,28 @@ Trainset::Trainset(int in_size, int out_size, int num)
 
 VectorXd Trainset::getInput(int i)
 {
+    assert(i < n);
     return vi[i];
 }
 
 VectorXd Trainset::getOutput(int i)
 {
+    assert(i < n);
     return vo[i];
 }
 
 void Trainset::setMyAns(VectorXd v, int i)
 {
     assert(v.rows() == outputsize);
+    assert(i < n);
     myans[i] = v;
 }
 
+VectorXd Trainset::getMyAns(int i)
+{
+    assert(i < n);
+    return myans[i];
+}
 double Trainset::calculatePrecision()
 {
     int count = 0;

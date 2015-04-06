@@ -1,4 +1,5 @@
 #include <Eigen/Dense>
+#include <cmath>
 
 using namespace Eigen;
 
@@ -12,6 +13,7 @@ public:
     VectorXd getInput(int i);
     VectorXd getOutput(int i);
     void setMyAns(VectorXd v, int i);
+    VectorXd getMyAns(int i);
     double calculatePrecision();
     int getSize();
 };

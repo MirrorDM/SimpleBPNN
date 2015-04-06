@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include <Eigen/Dense>
 #include <cstdlib>
 #include "Layer.h"
@@ -24,14 +25,15 @@ int main()
     VectorXd y(hidden), dy(hidden), theta1(hidden);
     VectorXd z(outputs), dz(outputs), theta2(outputs), ans(outputs);
 
-    Trainset train(2, 1, 200000);
-    Trainset testcase(2,1,1000);
+    Trainset train(2, 1, 100000);
+    Trainset testcase(2,1,5000);
     
-    for(int i = 0; i < train.getSize(); i++) {
+    int trainsize = train.getSize();
+    for(int i = 0; i < trainsize; i++) {
 
-        if (i % (train.getSize() / 100) == 0)
+        if (i % (trainsize / 100) == 0)
         {
-            cout << "Training Process: " << (double) i / train.getSize() * 100 << '%' << '\r';
+            cout << "Training Process: " << (double) i / trainsize * 100 << '%' << " of " << trainsize << '\r';
             cout.flush();
         }
 
@@ -85,17 +87,28 @@ int main()
         testcase.setMyAns(z, i);
     }
     double accurate = testcase.calculatePrecision();
-    cout << endl << "----------" << endl;
+    cout << endl << endl << "----------" << endl;
     cout << "accurate: " << accurate * 100 << '%' << endl;
     cout << "----------" << endl << endl;
 
-    PRINT(w1.getMatrix());
-    PRINT(w1.getOffset());
-    PRINT(w2.getMatrix());
-    PRINT(w2.getOffset());
-    // cout << "input 10 = " << endl << train.getInput(121) << endl;
-    // cout << "output 10 = " << endl << train.getOutput(121) << endl;
-
+    fstream fout;
+    fout.open("plot/dot.txt", ios::out);
+    for (int i = 0; i < testcase.getSize(); i++)
+    {
+        x = testcase.getInput(i);
+        z = testcase.getMyAns(i);
+        for (int j = 0; j < x.rows(); j++)
+        {
+            fout << x[j] << ' ';
+        }
+        fout << z[0] << endl;
+    }
+    fout.close();
+    // PRINT(w1.getMatrix());
+    // PRINT(w1.getOffset());
+    // PRINT(w2.getMatrix());
+    // PRINT(w2.getOffset());
+    return 0;
 }
 
 
